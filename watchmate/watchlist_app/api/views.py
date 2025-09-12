@@ -8,7 +8,7 @@ from watchlist_app.models import Watchlist, StreamPlatform, Review
 from rest_framework import status
 
 class ReviewListAV(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AdminOrReadOnly]
     def get(self,request):  
         reviews = Review.objects.all()
         serializer = ReviewSerializer(reviews, many=True, context={'request': request})
@@ -48,7 +48,7 @@ class ReviewDetailAV(APIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
     
 class StreamPlatformAV(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AdminOrReadOnly]
     def get(self,request):  
         platforms = StreamPlatform.objects.all()
         serializer = StreamPlatformSerializer(platforms, many=True, context={'request': request})

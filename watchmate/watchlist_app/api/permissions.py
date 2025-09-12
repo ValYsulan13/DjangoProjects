@@ -1,4 +1,5 @@
 from rest_framework import permissions
+from watchlist_app.models import Review
 
 class AdminOrReadOnly(permissions.IsAdminUser):
     
