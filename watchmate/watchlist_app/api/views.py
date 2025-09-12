@@ -1,4 +1,6 @@
 from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
+from watchlist_app.api.permissions import AdminOrReadOnly, ReviewUserOrReadOnly
 # from rest_framework.decorators import api_view
 from rest_framework.views import APIView
 from watchlist_app.api.serializers import WatchlistSerializer,StreamPlatformSerializer, ReviewSerializer
@@ -6,6 +8,7 @@ from watchlist_app.models import Watchlist, StreamPlatform, Review
 from rest_framework import status
 
 class ReviewListAV(APIView):
+    permission_classes = [IsAuthenticated]
     def get(self,request):  
         reviews = Review.objects.all()
         serializer = ReviewSerializer(reviews, many=True, context={'request': request})
@@ -21,6 +24,7 @@ class ReviewListAV(APIView):
 
 
 class ReviewDetailAV(APIView):
+    permission_classes = [ReviewUserOrReadOnly]
     def get(self,request, pk):
         try:
             review = Review.objects.get(pk=pk)
@@ -44,6 +48,7 @@ class ReviewDetailAV(APIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
     
 class StreamPlatformAV(APIView):
+    permission_classes = [IsAuthenticated]
     def get(self,request):  
         platforms = StreamPlatform.objects.all()
         serializer = StreamPlatformSerializer(platforms, many=True, context={'request': request})
@@ -59,7 +64,7 @@ class StreamPlatformAV(APIView):
     
 
 class WatchlistAV(APIView):
-    
+    permission_classes = [IsAuthenticated]
     def get(self,request):  
         movies = Watchlist.objects.all()
         serializer = WatchlistSerializer(movies, many=True, context={'request': request})
@@ -74,7 +79,7 @@ class WatchlistAV(APIView):
             return Response(serializer.errors)
 
 class WatchDetailAV(APIView):
-    
+    permission_classes = [IsAuthenticated]
     def get(self,request, pk):
         try:
             movie = Watchlist.objects.get(pk=pk)
