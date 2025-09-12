@@ -26,7 +26,7 @@ class ReviewDetailAV(APIView):
             review = Review.objects.get(pk=pk)
         except Review.DoesNotExist:
             return Response({'error': 'Movie not found'}, status=status.HTTP_404_NOT_FOUND)
-        serializer = ReviewSerializer(review)
+        serializer = ReviewSerializer(review, context={'request': request})
         return Response(serializer.data)
     
     def put(self, request, pk):
